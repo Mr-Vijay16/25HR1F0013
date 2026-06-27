@@ -7,6 +7,13 @@ class Notification(models.Model):
         ("Result", "Result"),
         ("Placement", "Placement"),
         ("Event", "Event"),
+        ("Academic", "Academic"),
+    ]
+
+    DELIVERY_STATUS = [
+        ("Pending", "Pending"),
+        ("Sent", "Sent"),
+        ("Failed", "Failed"),
     ]
 
     id = models.UUIDField(
@@ -14,12 +21,21 @@ class Notification(models.Model):
         default=uuid.uuid4,
         editable=False
     )
+
     type = models.CharField(
         max_length=20,
         choices=NOTIFICATION_TYPES
     )
+
     message = models.TextField()
+
     timestamp = models.DateTimeField()
+
+    status = models.CharField(
+        max_length=20,
+        choices=DELIVERY_STATUS,
+        default="Pending"
+    )
 
     class Meta:
         ordering = ["-timestamp"]
@@ -29,4 +45,4 @@ class Notification(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.type} - {self.message[:30]}"
+        return self.message[:50]
